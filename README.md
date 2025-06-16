@@ -1,61 +1,148 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+---
 
-## About Laravel
+# API de Animes em Laravel
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Uma API RESTful simples desenvolvida em Laravel para gerenciar e consultar uma base de dados de animes. Este projeto foi criado como um case de estudo para demonstrar as funcionalidades essenciais de uma API, incluindo listagem, consulta por ID e filtragem avançada de recursos.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## ✨ Funcionalidades
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- Listagem paginada de animes.
+- Consulta de um anime específico por seu ID.
+- Sistema de filtragem robusto por:
+  - Título (parcial)
+  - Ano de lançamento (exato)
+  - Gênero
+  - Estúdio (parcial)
+- Possibilidade de combinar múltiplos filtros em uma única requisição.
+- Base de dados inicial com 30 animes para testes.
 
-## Learning Laravel
+## 🛠️ Tecnologias Utilizadas
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- **Backend:** Laravel 10+
+- **Linguagem:** PHP 8.1+
+- **Banco de Dados:** SQLite
+- **Gerenciador de Dependências:** Composer
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## 🚀 Instalação e Setup
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Siga os passos abaixo para rodar o projeto em seu ambiente local.
 
-## Laravel Sponsors
+**1. Clonar o Repositório**
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+```bash
+git clone https://github.com/Poliih/api-rest.git
+cd api-rest
+```
 
-### Premium Partners
+**2. Instalar as Dependências**
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+Use o Composer para instalar todas as dependências do PHP.
 
-## Contributing
+```bash
+composer install
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+**3. Configurar o Ambiente**
 
-## Code of Conduct
+Copie o arquivo de exemplo de ambiente e gere a chave da aplicação.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+cp .env.example .env
+php artisan key:generate
+```
 
-## Security Vulnerabilities
+**4. Configurar o Banco de Dados (SQLite)**
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Este projeto está configurado para usar SQLite por padrão.
 
-## License
+a. Garanta que seu arquivo `.env` tenha a seguinte configuração:
+```dotenv
+DB_CONNECTION=sqlite
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+b. Crie o arquivo do banco de dados na pasta `database/`:
+```bash
+touch database/database.sqlite
+```
+
+**5. Rodar as Migrations e Seeders**
+
+Este comando irá criar a estrutura da tabela `animes` e populá-la com 30 registros para teste.
+
+```bash
+php artisan migrate --seed
+```
+
+**6. Iniciar o Servidor**
+
+Inicie o servidor de desenvolvimento local do Laravel.
+
+```bash
+php artisan serve
+```
+
+Pronto! Sua API estará rodando em `http://127.0.0.1:8000`.
+
+---
+
+## 📖 Endpoints da API
+
+A URL base para todos os endpoints é `http://127.0.0.1:8000/api`.
+
+### 1. Listar Animes
+
+Retorna uma lista paginada de todos os animes.
+
+- **Endpoint:** `GET /animes`
+- **Exemplo:**
+  ```http
+  GET http://127.0.0.1:8000/api/animes
+  ```
+- **Paginação:** Para navegar entre as páginas, use o parâmetro `page`.
+  ```http
+  GET http://127.0.0.1:8000/api/animes?page=2
+  ```
+
+### 2. Buscar Anime por ID
+
+Retorna os detalhes de um anime específico.
+
+- **Endpoint:** `GET /animes/{id}`
+- **Exemplo:**
+  ```http
+  GET http://127.0.0.1:8000/api/animes/7
+  ```
+
+### 3. Filtrar Animes
+
+É possível adicionar parâmetros de query no endpoint de listagem (`/animes`) para filtrar os resultados.
+
+#### Parâmetros de Filtro Disponíveis:
+
+- `titulo` (string): Filtra por parte do título do anime.
+- `ano` (integer): Filtra pelo ano de lançamento exato.
+- `genero` (string): Filtra por um gênero específico (deve ser o nome exato).
+- `estudio` (string): Filtra por parte do nome do estúdio.
+
+#### Exemplos de Filtragem:
+
+- **Filtrar por título:**
+  ```http
+  GET http://127.0.0.1:8000/api/animes?titulo=Titan
+  ```
+
+- **Filtrar por gênero:**
+  ```http
+  GET http://127.0.0.1:8000/api/animes?genero=Psicológico
+  ```
+
+- **Filtrar por ano de lançamento:**
+  ```http
+  GET http://127.0.0.1:8000/api/animes?ano=2022
+  ```
+
+- **Combinar filtros:** (Os filtros podem ser usados em conjunto)
+  ```http
+  GET http://127.0.0.1:8000/api/animes?estudio=Bones&genero=Ação
+  ```
